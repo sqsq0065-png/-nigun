@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#6d28d9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ניגון">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<title>ניגון — הנגן האישי שלך</title>
+<style>
+:root{
+ --bg:#f7f5fb;--surface:#fff;--surface2:#f0ebf6;--text:#1b1720;--muted:#766d80;--line:#e7dfee;
+ --accent:#6d28d9;--accent2:#8b5cf6;--accentSoft:#eee7ff;--danger:#b42318;--ok:#027a48;
+ --radius:24px;--shadow:0 14px 42px rgba(50,25,80,.12);--safeT:env(safe-area-inset-top,0px);--safeB:env(safe-area-inset-bottom,0px);
+}
+body.dark{--bg:#0d0a11;--surface:#17121d;--surface2:#211a28;--text:#fbf8ff;--muted:#aaa0b1;--line:#302738;--accentSoft:#2b1f42;--shadow:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select{font:inherit}button{cursor:pointer}
+.hidden{display:none!important}.grow{flex:1}.row{display:flex;align-items:center;gap:10px}
+.auth{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 20% 10%,color-mix(in srgb,var(--accent) 24%,transparent),transparent 32%),var(--bg)}
+.authCard{width:min(480px,100%);background:var(--surface);border:1px solid var(--line);border-radius:32px;padding:24px;box-shadow:var(--shadow)}
+.logo{width:82px;height:82px;border-radius:25px;display:block;margin:auto;object-fit:cover;box-shadow:var(--shadow)}
+.auth h1{text-align:center;margin:14px 0 4px}.auth p{text-align:center;color:var(--muted);margin-top:0}
+.field{margin-top:12px}.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}.field input,.field select{width:100%;padding:13px;border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:14px;outline:none}
+.primary{border:0;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;padding:13px 18px;border-radius:16px;font-weight:900}
+.secondary{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:12px 16px;border-radius:16px}
+.authTabs{display:flex;background:var(--surface2);padding:4px;border-radius:14px;margin:18px 0}.authTabs button{flex:1;border:0;background:transparent;color:var(--text);padding:10px;border-radius:11px}.authTabs button.active{background:var(--surface);color:var(--accent);font-weight:900}
+.app{min-height:100vh;padding-bottom:150px}
+header{position:sticky;top:0;z-index:20;padding:calc(12px + var(--safeT)) 14px 12px;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.top{max-width:1180px;margin:auto;display:flex;align-items:center;gap:10px}.brand{font-weight:950;font-size:24px}.sub{color:var(--muted);font-size:12px}
+.avatar{width:44px;height:44px;border-radius:15px;border:0;background:var(--accentSoft);color:var(--accent);font-weight:900}
+.search{width:min(420px,45vw);padding:12px 14px;border-radius:15px;border:1px solid var(--line);background:var(--surface);color:var(--text)}
+main{max-width:1180px;margin:auto;padding:16px}
+.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:8px}.tab{border:1px solid var(--line);background:var(--surface);color:var(--text);padding:10px 14px;border-radius:999px;white-space:nowrap}.tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.section{display:none}.section.active{display:block}
+.hero{margin-top:12px;border-radius:30px;padding:24px;color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent2));position:relative;overflow:hidden}.hero h2{margin:0 0 6px;font-size:30px}.hero p{margin:0;opacity:.88}
+.sectionHead{display:flex;align-items:center;gap:10px;margin:22px 0 12px}.sectionHead h3{margin:0;flex:1}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:11px;box-shadow:var(--shadow);position:relative}.cover{width:100%;aspect-ratio:1;object-fit:cover;border-radius:18px;background:var(--accentSoft)}.title{font-weight:900;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.meta{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.playBtn{position:absolute;left:20px;top:130px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;color:var(--accent);font-size:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.fileBox{border:2px dashed var(--line);background:var(--surface2);border-radius:20px;padding:18px;text-align:center;margin-top:12px}
+.settingRow{padding:16px 0;border-bottom:1px solid var(--line)}
+.themeChoices{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}.themeChoice{border:2px solid transparent;background:var(--surface2);border-radius:20px;padding:9px}.themeChoice.active{border-color:var(--accent)}.preview{height:120px;border-radius:14px;padding:9px;overflow:hidden;border:1px solid var(--line)}.preview.light{background:#f8f6fb}.preview.dark{background:#151119}.preview.auto{background:linear-gradient(90deg,#f8f6fb 50%,#151119 50%)}.miniBar{height:12px;width:70%;border-radius:8px;background:var(--accent);margin-bottom:7px}.miniCard{height:28px;border-radius:8px;background:rgba(128,128,128,.22);margin-top:6px}.themeLabel{text-align:center;font-weight:800;margin-top:7px}
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));gap:10px;margin-top:12px}.swatch{aspect-ratio:1;border:3px solid var(--surface);outline:1px solid var(--line);border-radius:50%}.swatch.active{outline:3px solid var(--text)}
+.profileCard{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}.bigAvatar{width:66px;height:66px;border-radius:22px;background:var(--accentSoft);color:var(--accent);display:grid;place-items:center;font-size:24px;font-weight:900}
+.mini{position:fixed;z-index:45;left:12px;right:12px;bottom:76px;max-width:760px;margin:auto;background:color-mix(in srgb,var(--surface) 95%,transparent);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:22px;padding:9px;display:none;align-items:center;gap:10px;box-shadow:var(--shadow)}.mini.show{display:flex}.mini img{width:54px;height:54px;border-radius:14px;object-fit:cover}.mini button{border:0;background:transparent;color:var(--text);font-size:18px}
+.bottom{position:fixed;z-index:44;bottom:0;left:0;right:0;display:flex;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(20px);border-top:1px solid var(--line);padding:7px 6px calc(7px + var(--safeB))}.bottom button{flex:1;border:0;background:transparent;color:var(--muted);padding:6px;font-size:12px}.bottom button.active{color:var(--accent);font-weight:900}
+.player{position:fixed;inset:0;z-index:70;background:var(--bg);display:none;overflow:auto;padding:calc(12px + var(--safeT)) 16px calc(20px + var(--safeB))}.player.show{display:block}.playerIn{max-width:650px;margin:auto}.playerMedia{width:min(86vw,500px);aspect-ratio:1;object-fit:cover;display:block;margin:22px auto;border-radius:32px;background:#000}.player h2{text-align:center}.seek{width:100%;accent-color:var(--accent)}.controls{display:flex;justify-content:center;align-items:center;gap:22px}.controls button{border:0;background:transparent;color:var(--text);font-size:24px}.controls .big{width:72px;height:72px;background:var(--accent);color:#fff;border-radius:50%}
+.lock{position:fixed;inset:0;z-index:100;background:#0b0810;color:#fff;display:none;place-items:center;padding:24px}.lock.show{display:grid}.lockBox{max-width:500px;text-align:center}.lockIcon{font-size:56px}.lockBox p{color:#c9c0cf;line-height:1.6}.dangerBtn{background:#b42318;color:#fff;border:0;padding:13px 18px;border-radius:16px;font-weight:900}
+.toast{position:fixed;z-index:120;top:calc(15px + var(--safeT));left:50%;transform:translateX(-50%);background:#17121d;color:#fff;border-radius:14px;padding:11px 15px;opacity:0;transition:.2s}.toast.show{opacity:1}
+@media(max-width:700px){.formGrid{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.themeChoices{grid-template-columns:1fr}.search{width:100%;order:3}.top{flex-wrap:wrap}.brand{flex:1}.hero h2{font-size:24px}}
+@media(orientation:landscape) and (max-height:560px){.playerIn{max-width:1000px;display:grid;grid-template-columns:46% 1fr;gap:18px;align-items:center}.playerMedia{width:100%;margin:4px}.playerInfo{padding:10px}}
+</style>
+</head>
+<body>
+
+<section id="authScreen" class="auth">
+  <div class="authCard">
+    <img class="logo" src="icon-512.png" alt="לוגו ניגון"><h1>ניגון</h1><p>הנגן האישי והפרטי שלך</p>
+    <div class="authTabs"><button id="loginTab" class="active">כניסה</button><button id="registerTab">הרשמה</button></div>
+    <div id="loginForm">
+      <div class="field"><label>מספר טלפון</label><input id="loginPhone" inputmode="tel" placeholder="05XXXXXXXX"></div>
+      <div class="field"><label>סיסמה</label><input id="loginPassword" type="password" placeholder="••••••"></div>
+      <button id="loginBtn" class="primary" style="width:100%;margin-top:16px">כניסה לנגן שלי</button>
+    </div>
+    <div id="registerForm" class="hidden">
+      <div class="field"><label>שם מלא</label><input id="regName" placeholder="השם שלך"></div>
+      <div class="field"><label>מספר טלפון</label><input id="regPhone" inputmode="tel" placeholder="05XXXXXXXX"></div>
+      <div class="field"><label>סיסמה</label><input id="regPassword" type="password" placeholder="לפחות 4 תווים"></div>
+      <button id="registerBtn" class="primary" style="width:100%;margin-top:16px">יצירת אזור אישי</button>
+    </div>
+    <div class="sub" style="text-align:center;margin-top:14px">החשבון והספרייה שלך נשמרים באופן פרטי ומאובטח בענן.</div>
+  </div>
+</section>
+
+<section id="appScreen" class="app hidden">
+<header><div class="top"><img src="icon-192.png" alt="לוגו ניגון" style="width:44px;height:44px;border-radius:14px;object-fit:cover"><div><div class="brand">ניגון</div><div class="sub">הנגן האישי שלך</div></div><input id="search" class="search" placeholder="חיפוש שיר, אמן, אלבום..."><button id="profileBtn" class="avatar">א</button></div></header>
+<main>
+  <div class="tabs">
+    <button class="tab active" data-tab="home">בית</button><button class="tab" data-tab="library">ספרייה</button><button class="tab" data-tab="playlists">פלייליסטים</button><button class="tab" data-tab="upload">העלאה</button><button class="tab" data-tab="settings">הגדרות</button>
+  </div>
+
+  <section id="home" class="section active">
+    <div class="hero"><h2 id="helloTitle">שלום 👋</h2><p>כל המוזיקה שלך במקום אחד, פרטי רק לך.</p></div>
+    <div class="sectionHead"><h3>נוגן לאחרונה</h3><button id="shuffle" class="secondary">ערבב הכל</button></div><div id="recentGrid" class="grid"></div>
+  </section>
+
+  <section id="library" class="section"><div class="sectionHead"><h3>הספרייה שלי</h3></div><div id="libraryGrid" class="grid"></div></section>
+
+  <section id="playlists" class="section">
+    <div class="panel"><div class="row"><input id="playlistName" class="search grow" placeholder="שם פלייליסט חדש"><button id="createPlaylist" class="primary">צור</button></div><div id="playlistList" style="margin-top:14px"></div></div>
+  </section>
+
+  <section id="upload" class="section">
+    <div class="panel">
+      <h3>העלאת שיר או סרטון</h3>
+      <div class="formGrid">
+        <div class="field"><label>שם</label><input id="trackTitle"></div>
+        <div class="field"><label>אמן</label><input id="trackArtist"></div>
+        <div class="field"><label>אלבום</label><input id="trackAlbum"></div>
+        <div class="field"><label>ז'אנר</label><input id="trackGenre" placeholder="חסידי / קומזיץ / ווקאלי..."></div>
+      </div>
+      <div class="fileBox"><strong>קובץ שמע / וידאו</strong><br><input id="mediaFile" type="file" accept="audio/*,video/*"></div>
+      <div class="fileBox"><strong>תמונת קאבר</strong><br><input id="coverFile" type="file" accept="image/*"></div>
+      <div class="settingRow"><div class="row"><input id="restricted" type="checkbox"><label for="restricted"><strong>סמן כקובץ מוגבל / לא מאושר</strong><div class="sub">אם מופעל מצב סינון כשר, הקובץ לא יתנגן והנגן יינעל עם אזהרה.</div></label></div></div>
+      <button id="saveTrack" class="primary">שמור בספרייה שלי</button>
+    </div>
+  </section>
+
+  <section id="settings" class="section">
+    <div class="panel">
+      <div class="profileCard"><div id="bigAvatar" class="bigAvatar">א</div><div><strong id="profileName">—</strong><div id="profilePhone" class="sub">—</div></div><button id="logoutBtn" class="secondary">התנתקות</button></div>
+
+      <div class="settingRow">
+        <strong>מצב תצוגה</strong><div class="sub">בחר איך האפליקציה תיראה. התצוגות למטה מדמות את המסך.</div>
+        <div class="themeChoices">
+          <button class="themeChoice" data-theme="light"><div class="preview light"><div class="miniBar"></div><div class="miniCard"></div><div class="miniCard"></div></div><div class="themeLabel">בהיר</div></button>
+          <button class="themeChoice" data-theme="dark"><div class="preview dark"><div class="miniBar"></div><div class="miniCard"></div><div class="miniCard"></div></div><div class="themeLabel">כהה</div></button>
+          <button class="themeChoice" data-theme="auto"><div class="preview auto"><div class="miniBar"></div><div class="miniCard"></div><div class="miniCard"></div></div><div class="themeLabel">אוטומטי</div></button>
+        </div>
+      </div>
+
+      <div class="settingRow"><strong>צבע האפליקציה</strong><div class="sub">בחר גוון ראשי לממשק</div><div id="palette" class="palette"></div></div>
+
+      <div class="settingRow"><div class="row"><input id="kosherMode" type="checkbox"><label for="kosherMode"><strong>מצב סינון כשר</strong><div class="sub">קובץ שסומן כמוגבל יגרום לעצירת הנגן ולהצגת אזהרה.</div></label></div></div>
+
+      <div class="settingRow"><strong>פרטיות</strong><div class="sub">הספרייה, המועדפים והפלייליסטים פרטיים ומופרדים לכל חשבון.</div></div>
+    </div>
+  </section>
+</main>
+
+<div id="mini" class="mini"><img id="miniCover" src="icon-192.png"><div class="grow" id="openPlayer"><div id="miniTitle" class="title">—</div><div id="miniArtist" class="sub">—</div></div><button id="prevMini">⏮</button><button id="playMini">▶</button><button id="nextMini">⏭</button></div>
+<nav class="bottom"><button data-tab="home" class="active">בית</button><button data-tab="library">ספרייה</button><button data-tab="playlists">פלייליסטים</button><button data-tab="upload">העלאה</button><button data-tab="settings">הגדרות</button></nav>
+</section>
+
+<div id="player" class="player"><div class="playerIn"><div class="row"><button id="closePlayer" class="secondary">חזרה</button><div class="grow"></div><button id="favBtn" class="secondary">♡</button></div><img id="playerCover" class="playerMedia" src="icon-512.png"><video id="videoEl" class="playerMedia" controls playsinline style="display:none"></video><div class="playerInfo"><h2 id="playerTitle">—</h2><div id="playerArtist" class="sub" style="text-align:center">—</div><input id="seek" class="seek" type="range" min="0" max="1000" value="0"><div class="row sub"><span id="cur">0:00</span><span class="grow"></span><span id="dur">0:00</span></div><div class="controls"><button id="prev">⏮</button><button id="play" class="big">▶</button><button id="next">⏭</button></div></div></div></div>
+
+<div id="lockScreen" class="lock"><div class="lockBox"><div class="lockIcon">🔒</div><h2>הנגן נעצר</h2><p id="lockText">הקובץ שסומן כמוגבל נחסם במצב הסינון הכשר.</p><button id="unlockBtn" class="dangerBtn">פתח מחדש</button></div></div>
+<div id="toast" class="toast"></div>
+<audio id="audioEl" preload="metadata"></audio>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body></html>
